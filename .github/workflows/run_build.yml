@@ -157,6 +157,7 @@ jobs:
       - name: Custom Packages
         run: |
           cd ./wrt/package/
+          ls -l $GITHUB_WORKSPACE
 
           $GITHUB_WORKSPACE/Scripts/Packages.sh
           $GITHUB_WORKSPACE/Scripts/Handles.sh
