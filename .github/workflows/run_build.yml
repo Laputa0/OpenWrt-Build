@@ -97,7 +97,6 @@ jobs:
 
       - name: Clone Code
         run: |
-          pwd && echo $GITHUB_WORKSPACE
           git clone --depth=1 --single-branch --branch $WRT_BRANCH $WRT_REPO ./wrt/
 
           cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
@@ -158,7 +157,6 @@ jobs:
       - name: Custom Packages
         run: |
           cd ./wrt/package/
-          ls -l $GITHUB_WORKSPACE
 
           $GITHUB_WORKSPACE/Scripts/Packages.sh
           $GITHUB_WORKSPACE/Scripts/Handles.sh
