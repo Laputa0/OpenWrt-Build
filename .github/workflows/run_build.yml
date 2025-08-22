@@ -171,12 +171,11 @@ jobs:
           else
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
           fi
-
-          ls -al
-          cp -rf $GITHUB_WORKSPACE/files ./
-          ls -al
-          echo 'sed -i "s#^root.*#root:${{env.WRT_PASSWD}}:20322:0:99999:7:::#g" /etc/shadow' >> ./files/etc/uci-defaults/01-chpass.sh
-          cat ./files/etc/uci-defaults/01-chpass.sh
+    
+          rm -rf ./files; cp -rf $GITHUB_WORKSPACE/files ./
+          echo 'sed -i "s#^\(root:\)[^:]*#${{env.WRT_PASSWD}}#g" /etc/shadow' >> ./files/etc/uci-defaults/01-chpasswd
+          cat ./files/etc/uci-defaults/01-chpasswd
+          chmod +x ./files/etc/uci-defaults/01-chpasswd
           
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
