@@ -174,8 +174,10 @@ jobs:
 
           ls -al
           cp -rf $GITHUB_WORKSPACE/files ./
-          echo 'sed -i "s#^root.*#root:${{env.WRT_PASSWD}}:20317:0:99999:7:::#g" /etc/shadow' >> ./files/etc/uci-defaults/01-chpass.sh
-          cat $GITHUB_WORKSPACE/files/etc/uci-defaults/01-chpass.sh
+          ls -al
+          echo 'sed -i "s#^root.*#root:${{env.WRT_PASSWD}}:20322:0:99999:7:::#g" /etc/shadow' >> ./files/etc/uci-defaults/01-chpass.sh
+          cat ./files/etc/uci-defaults/01-chpass.sh
+          
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
           make defconfig -j$(nproc) && make clean -j$(nproc)
