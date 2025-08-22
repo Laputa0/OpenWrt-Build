@@ -172,7 +172,7 @@ jobs:
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
           fi
 
-          echo "sed -i \"s#^root.*#root:${WRT_PASSWD}#g\"" >> $GITHUB_WORKSPACE/files/etc/uci-defaults/01-chpass.sh
+          echo "sed -i \"s#^root.*#root:${{env.WRT_PASSWD}}#g\"" >> $GITHUB_WORKSPACE/files/etc/uci-defaults/01-chpass.sh
           cat $GITHUB_WORKSPACE/files/etc/uci-defaults/01-chpass.sh
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
