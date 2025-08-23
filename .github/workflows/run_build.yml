@@ -173,7 +173,7 @@ jobs:
           fi
     
           rm -rf ./files; cp -rf $GITHUB_WORKSPACE/files ./
-          cat <<EOF > ./files/etc/uci-defaults/99-chpasswd
+          cat <<'EOF' > ./files/etc/uci-defaults/99-chpasswd
             sed -i 's#^\(root:\)[^:]*#\1${{env.WRT_PASSWD}}#g' /etc/shadow
           EOF
           cat ./files/etc/uci-defaults/99-chpasswd
