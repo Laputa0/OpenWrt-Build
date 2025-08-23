@@ -67,6 +67,18 @@ jobs:
       - name: Checkout Projects
         uses: actions/checkout@main
 
+      - name: Machine Information
+        run: |
+          cd ./wrt/
+
+          echo "======================="
+          lscpu | grep -E "name|Core|Thread"
+          echo "======================="
+          df -h
+          echo "======================="
+          du -h --max-depth=1
+          echo "======================="
+
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -174,7 +186,7 @@ jobs:
     
           rm -rf ./files; cp -rf $GITHUB_WORKSPACE/files ./
           cat <<'EOF' > ./files/etc/uci-defaults/99-chpasswd
-            sed -i 's#^\(root:\)[^:]*#\1${{env.WRT_PASSWD}}#g' /etc/shadow
+          sed -i 's#^\(root:\)[^:]*#\1${{env.WRT_PASSWD}}#g' /etc/shadow
           EOF
           cat ./files/etc/uci-defaults/99-chpasswd
           chmod +x ./files/etc/uci-defaults/99-chpasswd
@@ -196,18 +208,6 @@ jobs:
           cd ./wrt/
 
           make -j$(nproc) || make -j$(nproc) V=s
-
-      - name: Machine Information
-        run: |
-          cd ./wrt/
-
-          echo "======================="
-          lscpu | grep -E "name|Core|Thread"
-          echo "======================="
-          df -h
-          echo "======================="
-          du -h --max-depth=1
-          echo "======================="
 
       - name: Package Firmware
         run: |
