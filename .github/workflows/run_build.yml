@@ -103,7 +103,7 @@ jobs:
           echo "WRT_DATE=$(TZ=UTC-8 date +"%y.%m.%d-%H.%M.%S")" >> $GITHUB_ENV
           echo "WRT_MARK=${GITHUB_REPOSITORY%%/*}" >> $GITHUB_ENV
           echo "WRT_INFO=${WRT_SOURCE%%/*}" >> $GITHUB_ENV
-          echo "WRT_PASSWD=$(openssl passwd -5 $WRT_PW)" >> $GITHUB_ENV
+          echo "WRT_PASS_HASH=$(openssl passwd -5 $WRT_PW)" >> $GITHUB_ENV
           echo "WRT_TARGET=$(grep -m 1 -oP '^CONFIG_TARGET_\K[\w]+(?=\=y)' ./Config/$WRT_CONFIG.txt)" >> $GITHUB_ENV
           echo "WRT_KVER=none" >> $GITHUB_ENV
           echo "WRT_LIST=none" >> $GITHUB_ENV
@@ -178,18 +178,14 @@ jobs:
         run: |
           cd ./wrt/
 
-          if [[ "${WRT_CONFIG,,}" == *"test"* ]]; then
-            cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
-          else
-            cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
-          fi
-    
+          cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
+
           rm -rf ./files; cp -rf $GITHUB_WORKSPACE/files ./
-          cat <<'EOF' > ./files/etc/uci-defaults/99-chpasswd
-          sed -i 's#^\(root:\)[^:]*#\1${{env.WRT_PASSWD}}#g' /etc/shadow
+          cat <<'EOF' > ./files/etc/uci-defaults/61-chpasswd
+          sed -i 's#^\(root:\)[^:]*#\1${{env.WRT_PASS_HASH}}#g' /etc/shadow
           EOF
-          cat ./files/etc/uci-defaults/99-chpasswd
-          chmod +x ./files/etc/uci-defaults/99-chpasswd
+          cat ./files/etc/uci-defaults/61-chpasswd
+          chmod +x ./files/etc/uci-defaults/61-chpasswd
           
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
