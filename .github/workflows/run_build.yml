@@ -69,14 +69,10 @@ jobs:
 
       - name: Machine Information
         run: |
-          cd ./wrt/
-
           echo "======================="
           lscpu | grep -E "name|Core|Thread"
           echo "======================="
           df -h
-          echo "======================="
-          du -h --max-depth=1
           echo "======================="
 
       - name: Initialization Environment
