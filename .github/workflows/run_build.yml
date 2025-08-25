@@ -79,6 +79,7 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          set -x
           sudo -E apt-get -yqq purge firefox
           sudo -E apt-get -yqq update
           sudo -E apt-get -yqq full-upgrade
@@ -96,6 +97,7 @@ jobs:
 
       - name: Initialization Values
         run: |
+          set -x
           echo "WRT_DATE=$(TZ=UTC-8 date +"%y.%m.%d-%H.%M.%S")" >> $GITHUB_ENV
           echo "WRT_MARK=${GITHUB_REPOSITORY%%/*}" >> $GITHUB_ENV
           echo "WRT_INFO=${WRT_SOURCE%%/*}" >> $GITHUB_ENV
@@ -106,6 +108,7 @@ jobs:
 
       - name: Clone Code
         run: |
+          set -x
           git clone --depth=1 --single-branch --branch $WRT_BRANCH $WRT_REPO ./wrt/
 
           cd ./wrt/ && echo "WRT_HASH=$(git log -1 --pretty=format:'%h')" >> $GITHUB_ENV
@@ -118,6 +121,7 @@ jobs:
 
       - name: Check Scripts
         run: |
+          set -x
           find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
 
       - name: Check Caches
@@ -158,6 +162,7 @@ jobs:
 
       - name: Update Feeds
         run: |
+          set -x
           cd ./wrt/
 
           ./scripts/feeds update -a
